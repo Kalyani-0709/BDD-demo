@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     //Project Configurations
-    solutionName="ruby-cucumber"
+    solutionName="bdd-atm"
     reportUrl = "http://ec2-54-90-56-187.compute-1.amazonaws.com:8080//job/$env.JOB_NAME/$env.BUILD_NUMBER/cucumber-html-reports/overview-failures.html"
 
 
