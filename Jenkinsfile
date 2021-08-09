@@ -1,5 +1,30 @@
+pipeline {
+    agent any 
+    stages {
+        stage('Compile and Clean') { 
+            steps {
+
+                sh "mvn clean compile"
+            }
+        }
+       
+		stage('Junit5 Test') { 
+            steps {
+
+                sh "mvn test"
+            }
+        }
+        
+        stage('Deploy') { 
+            steps {
+                sh "mvn package"
+            }
+        }       
+    }
+}
+
 node {
-    stage('Generate HTML report') {
+    stage('Cucumber report') {
         cucumber buildStatus: 'UNSTABLE',
                 reportTitle: 'My report',
                 fileIncludePattern: '**/*.json',
