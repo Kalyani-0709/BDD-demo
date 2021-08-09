@@ -8,20 +8,20 @@ pipeline{
         stage('Clean and Compile') { 
             steps {
 
-                bat "mvn clean compile"
+                sh "mvn clean compile"
             }
         }
        
         stage('Junit5 Test') { 
             steps {
 
-                bat "mvn test"
+                sh "mvn test"
             }
         }
         
         stage('Maven Build') { 
             steps {
-                bat "mvn package"
+                sh "mvn package"
             }
         }
 
