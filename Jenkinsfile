@@ -39,16 +39,7 @@ pipeline{
 			sh 'touch from-jenkins/test.txt'
 			}
 		}
-        stage ('Cucumber Reports') {
-
-            steps {
-                 cucumber buildStatus: 'UNSTABLE',
-                reportTitle: 'My report',
-                fileIncludePattern: '**/*.json',
-
-            }
-
-        }
+   
         
 
     }
