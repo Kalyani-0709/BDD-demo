@@ -21,7 +21,13 @@ pipeline {
             }
         } 
 	
-	    stage('Cucumber report') {
+	    
+    }
+	
+}
+
+node{
+	stage('Cucumber report') {
 		cucumber buildStatus: 'UNSTABLE',
 			reportTitle: 'My report',
 			fileIncludePattern: '**/*.json',
@@ -33,9 +39,9 @@ pipeline {
 			    ]
 			]
 	    }
-    
-    }
-	configure { project ->
+}
+
+configure { project ->
 	  project / 'publishers' << 'net.masterthought.jenkins.CucumberReportPublisher' {
 	    fileIncludePattern '**/*.json'
 	    fileExcludePattern ''
@@ -45,12 +51,11 @@ pipeline {
 	    pendingStepsNumber '0'
 	    undefinedStepsNumber '0'
 	    failedScenariosNumber '0'
-	    failedFeaturesNumber '0'
+	    failedFeaturesNumber '0'zz
 	    buildStatus 'FAILURE'  //other option is 'UNSTABLE' - if you'd like it left unchanged, don't provide a value
 	    trendsLimit '0'
 	    sortingMethod 'ALPHABETICAL'
 	  }
-}
 }
 
 
