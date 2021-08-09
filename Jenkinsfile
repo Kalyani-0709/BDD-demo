@@ -32,25 +32,19 @@ pipeline{
             }
         }
 
-	    stage('testing pipeline'){
-		  steps{
-	      echo 'test1'
-			sh 'mkdir from-jenkins'
-			sh 'touch from-jenkins/test.txt'
-			}
-		}
-   
+        stage ('Cucumber Reports') {
+
+            steps {
+                cucumber buildStatus: "UNSTABLE",
+                    fileIncludePattern: "**/cucumber.json",
+                    jsonReportDirectory: 'target'
+
+            }
+
+        }
+        
         
 
     }
-	node () {
-	   stage ('blah') {
-		def get_current_time_date = {
-		    return 'hoge'
-		}
-
-		echo get_current_time_date()
-	    }
-}
 
 }
