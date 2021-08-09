@@ -12,15 +12,7 @@ pipeline {
   agent any
 
   stages {
-    
-    stage('Building Docker image') {
-      steps{
-         sh "docker build -t ${solutionName}:${env.BUILD_NUMBER} ."
-      }
-    }
-
-
-    
+       
    stage('Run Tests') {
        steps {
 
