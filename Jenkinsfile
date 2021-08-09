@@ -1,62 +1,50 @@
-pipeline {
+pipeline{
 
+    agent any
 
-  environment {
-    //Project Configurations
-    solutionName="bdd-atm"
-    reportUrl = "http://ec2-54-90-56-187.compute-1.amazonaws.com:8080//job/$env.JOB_NAME/$env.BUILD_NUMBER/cucumber-html-reports/overview-failures.html"
+    stages {
 
+        stage ('Compile Stage') {
 
-  }
+            steps {
+               
+                    bat 'mvn compile'                
 
-  agent any
+            }
+        }
+        
+    	stage ('Test Stage') {
 
-  stages {
-       
-   stage('Run Tests') {
-       steps {
+            steps {
+                
+                    bat 'mvn test'
+                
 
-            script {
-              echo "Starting ${params.test} on ${params.environment} environment ${params.platform} platform with ${params.browser} browser"
-              sh """docker run -v ${env.WORKSPACE}:/${solutionName} ${solutionName}:${env.BUILD_NUMBER} cucumber features/${params.test}/${params.feature}.feature -p ${params.environment} -p ${params.platform} -p ${params.browser} -p ${params.report}"""
-             }
+            }
+        }       
+        
+		stage ('Build Stage') {
 
-       }
-   }
+            steps {
+               
+                    bat 'mvn package'                
 
-  }
+            }
+        }
 
-  post {
-  	     failure {
+        stage ('Cucumber Reports') {
 
-  	      echo "Test failed"
-                      cucumber buildStatus: 'FAIL',
-                                   failedFeaturesNumber: 1,
-                                   failedScenariosNumber: 1,
-                                   skippedStepsNumber: 1,
-                                   failedStepsNumber: 1,
-                                   fileIncludePattern: '**/*.json',
-                                   sortingMethod: 'ALPHABETICAL'
+            steps {
+                cucumber buildStatus: "UNSTABLE",
+                    fileIncludePattern: "**/cucumber.json",
+                    jsonReportDirectory: 'target'
 
-          slackSend color: 'red', message: "${params.reportname} Tests failed. >> Click to view <$reportUrl|report>"
+            }
 
-  	     }
+        }
+        
+        
 
-  	      success {
-
-          echo "Test succeeded"
-                     cucumber buildStatus: 'SUCCESS',
-                                            failedFeaturesNumber: 0,
-                                            failedScenariosNumber: 0,
-                                            skippedStepsNumber: 0,
-                                            failedStepsNumber: 0,
-                                            fileIncludePattern: '**/*.json',
-                                            sortingMethod: 'ALPHABETICAL'
-
-          slackSend color: 'green', message: "${params.reportname} Tests passed. >> Click to view <$reportUrl|report>"
-
-          }
-
-  }
+    }
 
 }
